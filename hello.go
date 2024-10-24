@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"bufio"
 )
 
 const monitoramentos = 3 //Numero de vezes que os sites serão monitorados
@@ -53,9 +54,9 @@ func leComando() int {
 
 func iniciarMonitoramento() {
 	fmt.Println("Monitorando...")
-	sites := []string{"https://www.alura.com.br", "https://www.twitch.tv/",
-		"https://www.globo.com/"}
+	//sites := []string{"https://www.alura.com.br", "https://www.twitch.tv/","https://www.globo.com/"}
 
+	sites := leSitesArquivo()
 	for i := 0; i < monitoramentos; i++ {
 		for i, site := range sites {
 			fmt.Println(i, site)
@@ -69,11 +70,29 @@ func iniciarMonitoramento() {
 }
 
 func testaSite(site string) {
-	resp, _ := http.Get(site)
+	resp, err := http.Get(site)
 
+	if err != nil {
+		fmt.Println("Ocorreu um erro:", err)
+	}
 	if resp.StatusCode == 200 {
 		fmt.Println("Site:", site, "foi carregado com sucesso")
 	} else {
 		fmt.Println("Site:", site, "esta com problemas. Error:", resp.StatusCode)
 	}
+}
+
+func leSitesArquivo() []string {
+	var sites []string
+	arquivo, error := os.Open("sites.txt")
+	if error != nil {
+		fmt.Println("Ocorreu um erro:", error)
+	}
+	leitor := bufio.NewReader(arquivo)
+	linha,err:=leitor.ReadString('\n')
+	if err != nil {
+		fmt.Println("Ocorreu um erro:", error)
+	}
+	fmt.Println(linha)
+	return sites
 }
