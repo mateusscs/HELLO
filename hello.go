@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -24,7 +24,7 @@ func main() {
 			os.Exit(-1)
 		}
 	}
-	
+
 }
 
 func introducao() {
@@ -48,26 +48,21 @@ func leComando() int {
 	return comandoLido
 }
 
-func iniciarMonitoramento(){
+func iniciarMonitoramento() {
 	fmt.Println("Monitorando...")
-	var sites [4]string
-	sites[0] = "https://random-status-code.herokuapp.com/"
-	sites[1] = "https://www.alura.com.br"
-	sites[2] = "https://www.caelum.com.br"
+	sites := []string{"https://www.alura.com.br", "https://www.twitch.tv/",
+		"https://www.globo.com/"}
 
-	fmt.Println(sites)
+	for i,site := range sites {
+		fmt.Println(i,site)
+	}
 	site := "https://www.alura.com.br"
 	resp, _ := http.Get(site)
 
-	if resp.StatusCode == 200{
-		fmt.Println("Site:",site,"foi carregado com sucesso")
-	}else{
-		fmt.Println("Site:",site,"esta com problemas. Error:",resp.StatusCode)
+	if resp.StatusCode == 200 {
+		fmt.Println("Site:", site, "foi carregado com sucesso")
+	} else {
+		fmt.Println("Site:", site, "esta com problemas. Error:", resp.StatusCode)
 	}
 
-}
-
-
-func exibeNomes(){
-	nomes := []string{""}
 }
