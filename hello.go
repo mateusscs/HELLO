@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 )
 
+const monitoramentos = 3 //Numero de vezes que os sites serão monitorados
+const delay = 5          //Atraso entre cada teste
 func main() {
 	introducao()
 	for {
@@ -53,10 +56,19 @@ func iniciarMonitoramento() {
 	sites := []string{"https://www.alura.com.br", "https://www.twitch.tv/",
 		"https://www.globo.com/"}
 
-	for i,site := range sites {
-		fmt.Println(i,site)
+	for i := 0; i < monitoramentos; i++ {
+		for i, site := range sites {
+			fmt.Println(i, site)
+			testaSite(site)
+		}
+		time.Sleep(delay * time.Second)
+		fmt.Println("")
 	}
-	site := "https://www.alura.com.br"
+	fmt.Println("")
+
+}
+
+func testaSite(site string) {
 	resp, _ := http.Get(site)
 
 	if resp.StatusCode == 200 {
@@ -64,5 +76,4 @@ func iniciarMonitoramento() {
 	} else {
 		fmt.Println("Site:", site, "esta com problemas. Error:", resp.StatusCode)
 	}
-
 }
